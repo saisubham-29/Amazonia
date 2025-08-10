@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engineering Insights</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("/bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: #333;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .menu-icon {
+        font-size: 24px;
+        color: #333;
+        cursor: pointer;
+        margin-right: 20px;
+      }
+
+      .logo {
+        height: 60px;
+        margin-right: 20px;
+      }
+
+      .search-bar {
+        flex-grow: 1;
+        display: flex;
+        margin-right: 20px;
+      }
+
+      .search-bar input {
+        width: 50%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+      }
+
+      .search-bar button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+      }
+
+      .about-us {
+        margin-right: 20px;
+        color: #333;
+        text-decoration: none;
+        text-align: right;
+        /* text-decoration-line:inherit; */
+        /* border-style:groove; */
+        /* border-radius: 5px 0 0 5px; */
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .user-profile i {
+        font-size: 24px;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      .logout-hover {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #f8f9fa;
+        padding: 5px 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-profile:hover .logout-hover {
+        display: block;
+      }
+
+      nav {
+        position: fixed;
+        top: 60px;
+        left: -300px;
+        width: 300px;
+        height: calc(100vh - 60px);
+        background-color: #f8f9fa;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav.visible {
+        left: 0;
+      }
+
+      .nav-links {
+        list-style-type: none;
+        margin: 0;
+        padding: 20px 0;
+      }
+
+      .dropdown {
+        margin: 10px 0;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+
+      .dropdown:last-child {
+        border-bottom: none;
+      }
+
+      .dropbtn {
+        display: block;
+        color: #333;
+        padding: 15px 25px;
+        font-size: 18px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .dropdown-content {
+        display: none; /* Ensure it's hidden by default */
+      }
+
+      .dropdown-content.show {
+        display: block; /* Show when the 'show' class is added */
+        background-color: #fff;
+      }
+
+      .dropdown-content a {
+        color: #333;
+        padding: 12px 25px;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.3s;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      main {
+        max-width: 800px;
+        margin: 80px auto 2rem;
+        padding: 2rem;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+
+      .thoughts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .thought {
+        background-color: #ccd4da;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .thought p {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .author {
+        display: block;
+        text-align: right;
+        font-style: italic;
+        color: #7f8c8d;
+      }
+
+      .video-popup {
+        display: none;
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+      }
+
+      .video-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .video-container iframe {
+        width: 300px;
+        height: 169px;
+      }
+
+      .open-video-popup {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .close-popup {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: white;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .chat-icon {
+        position: top center;
+        right: 20px;
+        bottom: 20px;
+        background-color: #007bff;
+        color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 24px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        margin: 10px;
+      }
+
+      .chat-container {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 300px;
+        height: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .chat-container.minimized {
+        height: 0;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .chat-header h3 {
+        margin: 0;
+      }
+
+      .minimize-chat {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .chat-messages {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .chat-input {
+        display: flex;
+        padding: 10px;
+      }
+
+      .chat-input input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .chat-input button {
+        margin-left: 10px;
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .open-dev-popup {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .dev-popup {
+        display: none;
+        position: fixed;
+        left: 20px;
+        bottom: 80px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+      }
+
+      .dev-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .dev-card {
+        width: 200px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+      }
+
+      .dev-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+      }
+
+      .close-dev-popup {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: white;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .profile-popup {
+    display: none;
+    position: fixed;
+    top: 60px; /* Adjust as needed */
+    right: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-options {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-options li {
+    margin: 5px 0;
+}
+
+.profile-options a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.profile-options a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="menu-icon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <img
+        src="/main-page-logo2.png"
+        alt="Logo"
+        class="logo"
+        style="margin-left: 50px"
+      />
+      <div class="search-bar" style="margin-left: 50px">
+        <input type="text" placeholder="Search..." />
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="chat-icon">
+        <i class="fas fa-comment"></i>
+      </div>
+      <a href="/sign-in.html" class="about-us">SIGN-IN</a>
+      <div class="user-profile" style="margin-right: 50px">
+        <i class="fas fa-user-circle"></i>
+        <div class="logout-hover">Logout</div>
+      </div>
+    </header>
+
+    <nav class="nav-menu">
+      <ul class="nav-links">
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile</a>
+          <div class="dropdown-content">
+            <a href="view-profile.html" target="_self">View Profile</a>
+            <a href="#">Edit Profile</a>
+            <a href="#">Settings</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Resource</a>
+          <div class="dropdown-content">
+            <a href="#">Notes</a>
+            <a href="#">Guidance</a>
+            <a href="#">Exam</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Community</a>
+          <div class="dropdown-content">
+            <a href="#">Forums</a>
+            <a href="#">Events</a>
+            <a href="#">Groups</a>
+            <a href="#">Mentorship</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="/sign-in.html" class="dropbtn">Logout</a>
+        </li>
+      </ul>
+    </nav>
+
+    <main style="margin-top: 120px">
+      <h1>Engineering Insights</h1>
+      <div class="thoughts-container">
+        <div class="thought">
+          <p>"The best way to predict the future is to create it."</p>
+          <span class="author">- Alan Kay, Computer Scientist</span>
+        </div>
+        <div class="thought">
+          <p>"Innovation distinguishes between a leader and a follower."</p>
+          <span class="author">- Steve Jobs, Co-founder of Apple</span>
+        </div>
+        <div class="thought">
+          <p>"The most powerful tool we have as developers is automation."</p>
+          <span class="author">- Scott Hanselman, Programming Expert</span>
+        </div>
+      </div>
+    </main>
+
+    <div class="video-popup">
+      <h3>Mentoring Videos</h3>
+      <div class="video-container">
+        <iframe
+          width="300"
+          height="169"
+          src="https://www.youtube.com/embed/Pt1KGG26RKU"
+          title="What to do in College? 1st Year RoadMap"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <center>
+          <u><b>(1ST-YEAR ROAD_MAP)</b></u>
+        </center>
+        <iframe
+          width="300"
+          height="169"
+          src="https://www.youtube.com/embed/C2QoDC1rka8"
+          title="What should you do in 2nd year of college? 2nd Year Roadmap"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <center>
+          <u><b>(2ND-YEAR ROAD_MAP)</b></u>
+        </center>
+        <iframe
+          width="300"
+          height="169"
+          src="https://www.youtube.com/embed/L_VzAelqVew"
+          title="How I would Code if I get back in 1st year of College? Software Development Placement | RoadMap"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <center>
+          <u><b>(WANT TO BEGIN CODING?)</b></u>
+        </center>
+      </div>
+      <center><button class="close-popup">Close</button></center>
+    </div>
+    <button class="open-video-popup">Mentoring Videos</button>
+
+    <div class="dev-popup" style="display: none">
+      <center>
+        <h3><u>DEVELOPERS</u></h3>
+      </center>
+      <div class="dev-container">
+        <div class="dev-card">
+          <img src="/sUBHAM.jpg" alt="Developer 1" />
+          <h4>HIMANSHU SINGH</h4>
+          <p>
+            Senior Full-Stack Developer with 10 years of experience in web
+            technologies.
+          </p>
+        </div>
+        <div class="dev-card">
+          <img src="/94ps6g9k.png" alt="Developer 2" />
+          <h4>SAI SUBHAM SAHU</h4>
+          <p>
+            UI/UX Specialist with a passion for creating intuitive user
+            experiences.
+          </p>
+        </div>
+        <div class="dev-card">
+          <img src="/laxmi.jpg" alt="Developer 3" />
+          <h4>LAXMIPADA PRADHAN</h4>
+          <p>
+            Backend Expert focusing on scalable architecture and database
+            optimization.
+          </p>
+        </div>
+      </div>
+      <center><button class="close-dev-popup">Close</button></center>
+    </div>
+
+    <button class="open-dev-popup">About Developers</button>
+    <div class="chat-container minimized">
+      <div class="chat-header">
+        <h3>Chat</h3>
+        <button class="minimize-chat"><i class="fas fa-minus"></i></button>
+      </div>
+      <div class="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" placeholder="Type a message..." />
+        <button class="send-message">Send</button>
+      </div>
+    </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Menu icon functionality
+    const menuIcon = document.querySelector('.menu-icon');
+    const navMenu = document.querySelector('.nav-menu');
+
+    menuIcon.addEventListener('click', () => {
+        navMenu.classList.toggle('visible');
+    });
+
+    // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.dropdown');
+
+    dropdowns.forEach(dropdown => {
+        const dropbtn = dropdown.querySelector('.dropbtn');
+        const dropdownContent = dropdown.querySelector('.dropdown-content');
+
+        dropbtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent the event from bubbling up
+            dropdownContent.classList.toggle('show');
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', () => {
+        dropdowns.forEach(dropdown => {
+            const dropdownContent = dropdown.querySelector('.dropdown-content');
+            dropdownContent.classList.remove('show');
+        });
+    });
+
+    // Video popup functionality
+    const openVideoPopup = document.querySelector('.open-video-popup');
+    const videoPopup = document.querySelector('.video-popup');
+    const closeVideoPopup = document.querySelector('.close-popup');
+
+    openVideoPopup.addEventListener('click', () => {
+        videoPopup.style.display = 'block';
+    });
+
+    closeVideoPopup.addEventListener('click', () => {
+        videoPopup.style.display = 'none';
+    });
+
+    // Developer popup functionality
+    const openDevPopup = document.querySelector('.open-dev-popup');
+    const devPopup = document.querySelector('.dev-popup');
+    const closeDevPopup = document.querySelector('.close-dev-popup');
+
+    openDevPopup.addEventListener('click', () => {
+        devPopup.style.display = 'block';
+    });
+
+    closeDevPopup.addEventListener('click', () => {
+        devPopup.style.display = 'none';
+    });
+
+    // Chat functionality
+    const chatIcon = document.querySelector('.chat-icon');
+    const chatContainer = document.querySelector('.chat-container');
+    const minimizeChat = document.querySelector('.minimize-chat');
+
+    chatIcon.addEventListener('click', () => {
+        chatContainer.classList.toggle('minimized');
+    });
+
+    minimizeChat.addEventListener('click', () => {
+        chatContainer.classList.toggle('minimized');
+    });
+
+    // Send message functionality (for demonstration)
+    const sendMessageButton = document.querySelector('.send-message');
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatInput = document.querySelector('.chat-input input');
+
+    sendMessageButton.addEventListener('click', () => {
+        const message = chatInput.value.trim();
+        if (message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatInput.value = ''; // Clear input field
+        }
+    });
+
+    // Close popups when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!videoPopup.contains(event.target) && event.target !== openVideoPopup) {
+            videoPopup.style.display = 'none';
+        }
+        if (!devPopup.contains(event.target) && event.target !== openDevPopup) {
+            devPopup.style.display = 'none';
+        }
+    });
+});
+// User profile popup functionality
+const userProfile = document.querySelector('.user-profile');
+const profilePopup = document.querySelector('.profile-popup');
+
+userProfile.addEventListener('click', (event) => {
+    event.stopPropagation(); // Prevent the event from bubbling up
+    profilePopup.style.display = profilePopup.style.display === 'block' ? 'none' : 'block';
+});
+
+// Close profile popup when clicking outside
+document.addEventListener('click', () => {
+    profilePopup.style.display = 'none';
+});
+document.addEventListener("DOMContentLoaded", function () {
+    // ... (existing code)
+
+    // View Profile functionality
+    const viewProfileLink = document.querySelector('.dropdown-content a[href="#"]');
+    viewProfileLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        window.open('view-profile.html', '_blank');
+    });
+
+    // ... (rest of the existing code)
+});
+
+    </script>
+    <!-- <div class="profile-popup" style="display: none;">
+        <div class="profile-header">
+            <img src="/PROFILE.jpg" alt="User Profile" class="profile-photo" />
+            <h4>User Name</h4>
+        </div>
+        <ul class="profile-options">
+            <li><a href="#">Manage Account</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="/sign-in-page.html">Logout</a></li>
+        </ul>
+    </div> -->
+    
+  </body>
+</html>

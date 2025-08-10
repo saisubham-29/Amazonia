@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mentorship Program - View Profile</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("/bg.jpg");
+        background-size: cover;
+        background-position: center;
+        color: #333;
+      }
+
+      header {
+        background-color: rgba(15, 128, 241, 0.8);
+        color: white;
+        padding: 10px 15px;
+        text-align: left;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+      }
+
+      .container {
+        max-width: 850px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        text-align: center;
+        color: #0a0e13;
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .profile-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 20px;
+        border: 2px solid #007bff;
+      }
+
+      .profile-details {
+        flex-grow: 1;
+      }
+
+      .profile-details h2 {
+        margin: 0;
+        color: #333;
+      }
+
+      .profile-details p {
+        margin: 5px 0;
+        color: #666;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 10px;
+        transition: background-color 0.3s;
+        font-size: 16px;
+      }
+
+      .button:hover {
+        background-color: #0056b3;
+      }
+
+      .settings-button {
+        background-color: #007bff;
+      }
+
+      .settings-button:hover {
+        background-color: #3007ff;
+      }
+
+      .change-photo-button {
+        background-color: #007bff;
+      }
+
+      .change-photo-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>YOUR PROFILE</h1>
+    </header>
+
+    <div class="container">
+      <div class="profile-header">
+        <img
+          src="/sUBHAM.jpg"
+          alt="Mentor Photo"
+          class="profile-photo"
+          id="mentorPhoto"
+        />
+        <div class="profile-details">
+          <h2>HIMANSHU SINGH</h2>
+          <p><strong>Title:</strong> Senior Software Engineer</p>
+          <p><strong>Expertise:</strong> Web Development, JavaScript</p>
+          <p><strong>Email:</strong> himansubham@gmail.com</p>
+          <p>
+            <strong>Bio:</strong> Passionate about teaching and sharing
+            knowledge with the next generation of developers.
+          </p>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button class="button" id="connectButton">Connect Mentor</button>
+        <button class="button" id="applyButton">Apply for Mentorship</button>
+        <button class="button change-photo-button" id="changePhotoButton">
+          Change Profile Photo
+        </button>
+        <button class="button settings-button" id="settingsButton">
+          <i class="fas fa-cog"></i> Settings
+        </button>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("connectButton")
+        .addEventListener("click", function () {
+          window.open("mailto:proctor.classteacher@example.com", "_self");
+        });
+
+      document
+        .getElementById("applyButton")
+        .addEventListener("click", function () {
+          window.open(
+            "https://docs.google.com/forms/d/e/1FAIpQLScdXJJ1M2gOPfmiLJdbwdZLGUMA92W4iHsOdwZgghFjcJSNLw/viewform?embedded=true",
+            "_blank"
+          );
+        });
+
+      document
+        .getElementById("changePhotoButton")
+        .addEventListener("click", function () {
+          const newPhoto = prompt("Enter the URL of the new profile photo:");
+          if (newPhoto) {
+            document.getElementById("mentorPhoto").src = newPhoto;
+          }
+        });
+
+      document
+        .getElementById("settingsButton")
+        .addEventListener("click", function () {
+          alert("Settings functionality not implemented.");
+        });
+    </script>
+  </body>
+</html>
