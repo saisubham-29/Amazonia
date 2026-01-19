@@ -3,7 +3,7 @@
 
 <p align="center" style="margin-top:12px;">
   <a 
-    href="https://vercel.com/sai-subham-sahus-projects/amazonia"
+    href="https://amazonia-black.vercel.app/"
     target="_blank"
     style="
       display:inline-block;
